@@ -5,6 +5,7 @@ import numpy as np # linear algebra
 import struct
 import torch
 from array import array
+from torch.utils.data import Dataset, DataLoader
 
 #
 # MNIST Data Loader Class
@@ -46,3 +47,15 @@ class MnistDataloader(object):
         x_train, y_train = self.read_images_labels(self.training_images_filepath, self.training_labels_filepath)
         x_test, y_test = self.read_images_labels(self.test_images_filepath, self.test_labels_filepath)
         return (x_train, y_train),(x_test, y_test)
+
+
+class MyDataset(Dataset):
+    def __init__(self, features, labels):
+        self.features = torch.FloatTensor(features)
+        self.labels = torch.LongTensor(labels)
+    
+    def __len__(self):
+        return len(self.features)
+    
+    def __getitem__(self, idx):
+        return self.features[idx], self.labels[idx]
